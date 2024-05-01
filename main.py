@@ -39,6 +39,11 @@ enemies = []
 
 font = pygame.font.Font(None, 64)
 
+#Read your max score
+
+with open("maxScore.txt","r") as file:
+	maxScore = int(file.read())
+
 
 
 
@@ -104,6 +109,17 @@ while True:
 		enemy.Update(groundMovingSpeed,enemies)
 		enemy.Draw(screen,spriteSheet,walkingProgress)
 		if dinoRect.colliderect(enemy.hitbox):
+			#Read the high score
+   
+			with open("maxScore.txt","r") as file:
+				maxScore = int(file.read())
+
+			#Save the high score
+			with open("maxScore.txt","w") as file:
+				if progress//groundMovingSpeed > maxScore:
+					file.write(str(progress//groundMovingSpeed))
+
+
 			raise InterruptedError("YOU LOST \n HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA")
 		
 
@@ -115,7 +131,7 @@ while True:
 
 
 	#Score
-	text = font.render(f'HI {(progress//groundMovingSpeed):04d}  {(progress//groundMovingSpeed):04d}', False,0x000000)
+	text = font.render(f'HI {(progress//groundMovingSpeed if progress//groundMovingSpeed > maxScore else maxScore):04d}  {(progress//groundMovingSpeed):04d}', False,0x000000)
 	textRect:pygame.Rect = text.get_rect()
 	textRect.topright = (X,0)
 	screen.blit(text,textRect)
