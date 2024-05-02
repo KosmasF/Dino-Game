@@ -2,11 +2,13 @@ from movingObject import MovingObject
 from pygame import draw
 
 class Bird(MovingObject):
+    birdStart = (260 ,2)
+    birdMargin = (92  ,80)
+    birdFrames = 2
+
+
     def __init__(self,height,progress):
         super().__init__(progress)
-        self.birdStart = (260 ,2)
-        self.birdMargin = (92  ,80)
-        self.birdFrames = 2
         self.animationProgress = 0
 
         if height == 0:

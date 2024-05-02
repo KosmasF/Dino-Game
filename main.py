@@ -1,6 +1,7 @@
 import pygame
 import sys
 from bird import Bird
+from cactus import Cactus
 import random
 
 pygame.init()
@@ -118,6 +119,9 @@ while True:
 			with open("maxScore.txt","w") as file:
 				if progress//groundMovingSpeed > maxScore:
 					file.write(str(progress//groundMovingSpeed))
+				else:
+					file.write(str(maxScore))
+
 
 
 			raise InterruptedError("YOU LOST \n HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA")
@@ -126,12 +130,12 @@ while True:
 	#Enemies
 	if enemiesSpawnProgress <= 0:
 		enemiesSpawnProgress = enemiesSpawnDistance
-		enemies.append(Bird(random.randint(0,2),enemiesSpawnDistance*groundMovingSpeed))
+		enemies.append(Bird(random.randint(0,2),enemiesSpawnDistance*groundMovingSpeed) if random.choice([True,False,False]) else Cactus(enemiesSpawnDistance*groundMovingSpeed,'small',groundDinoPos[1]+dinoFrameMargin[1]))
 	
 
 
 	#Score
-	text = font.render(f'HI {(progress//groundMovingSpeed if progress//groundMovingSpeed > maxScore else maxScore):04d}  {(progress//groundMovingSpeed):04d}', False,0x000000)
+	text = font.render(f'HI {(progress//groundMovingSpeed if progress//groundMovingSpeed > int(maxScore) else int(maxScore)):04d}  {(int(progress//groundMovingSpeed)):04d}', False,0x000000)
 	textRect:pygame.Rect = text.get_rect()
 	textRect.topright = (X,0)
 	screen.blit(text,textRect)
@@ -146,5 +150,6 @@ while True:
 	groundProgress+=1
 	walkingProgress+=0.15
 	enemiesSpawnProgress-=1
+	#groundMovingSpeed+=0.016
 	pygame.display.update()
 	clock.tick(60)
